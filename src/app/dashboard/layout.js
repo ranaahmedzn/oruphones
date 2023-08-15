@@ -1,4 +1,5 @@
 import DashboardDrawer from '@/components/DashboardDrawer';
+import Logout from '@/components/Logout';
 import ProfileDropdown from '@/components/profileDropdown';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -25,8 +26,8 @@ const layout = ({ children }) => {
                                 <Link href="/dashboard/connections" className='py-2 px-5 border border-transparent hover:border-gray-300 rounded-lg'>My Connections</Link>
                             </li>
                         </ul>
-
-                        <button>Logout</button>
+                        <Logout />
+                        
                     </div>
                 </aside>
 
