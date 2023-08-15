@@ -1,7 +1,10 @@
 import './globals.css'
-import { Inter, Outfit } from 'next/font/google'
+import {Outfit } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const outfit = Outfit({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'Oru Phones',
@@ -11,7 +14,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={outfit.className}>{children}</body>
     </html>
   )
 }
