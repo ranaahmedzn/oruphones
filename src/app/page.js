@@ -1,3 +1,4 @@
+import NavItems from '@/components/NavItems';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -8,11 +9,7 @@ const Home = () => {
       <nav className='px-4 md:px-0 w-full h-[80px] bg-indigo-500 text-white'>
         <div className='container mx-auto h-full flex items-center justify-between'>
           <Image src="/logo.png" width="80" height="60" alt='Logo image' />
-          <ul className='flex gap-10'>
-            <li><Link href="/login">Login</Link></li>
-            <li><Link href="/signup">Signup</Link></li>
-            <li><Link href="/dashboard/profile">Dashboard</Link></li>
-          </ul>
+          <NavItems />
         </div>
       </nav>
 

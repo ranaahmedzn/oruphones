@@ -1,19 +1,22 @@
 'use client';
 
+import createJWT from '@/Utilities/createJWT';
 import useAuth from '@/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { startTransition, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaExclamationCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignUpPage = () => {
-    const router = useRouter()
     const [show, setShow] = useState(false)
     const [error, setError] = useState(false)
 
     const { createUser, updateUserProfile } = useAuth()
+    const search = useSearchParams();
+    const from = search.get("redirectUrl") || "/";
+    const { replace, refresh } = useRouter();
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -28,26 +31,29 @@ const SignUpPage = () => {
         formData.append('file', photo)
         formData.append('upload_preset', 'my-uploads')
 
-        createUser(email, password)
-            .then(result => {
-                const user = result.user;
-                fetch('https://api.cloudinary.com/v1_1/dytlsrnu3/image/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data) {
-                            updateUserProfile(name, data.secure_url)
-                                .then(() => {
-                                    toast.success("Signup successful!");
-                                    router.push('/')
-                                })
-                                .catch(error => console.log(error?.message))
-                        }
-                    })
+        const toastId = toast.loading("Loading...");
+        try {
+            await createUser(email, password);
+            await createJWT({ email });
+
+            const res = await fetch('https://api.cloudinary.com/v1_1/dytlsrnu3/image/upload', {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => console.log(error?.message))
+            const data = await res.json()
+
+            await updateUserProfile(name, data.secure_url)
+
+            startTransition(() => {
+                refresh();
+                replace(from);
+                toast.dismiss(toastId);
+                toast.success("User signup successful!");
+            });
+        } catch (error) {
+            toast.dismiss(toastId);
+            toast.error(error.message || "User not signed in");
+        }
     }
 
     return (
