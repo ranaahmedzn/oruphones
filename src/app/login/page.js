@@ -1,10 +1,11 @@
 'use client';
 
+import createJWT from '@/Utilities/createJWT';
 import useAuth from '@/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { startTransition, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaExclamationCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -14,21 +15,31 @@ const LoginPage = () => {
     const [error, setError] = useState(false)
 
     const {signInUser} = useAuth()
+    const search = useSearchParams();
+    const from = search.get("redirectUrl") || "/";
+    const { replace, refresh } = useRouter();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         const form  = e.target;
         const email = form.email.value;
         const password = form.password.value;
 
-        signInUser(email, password)
-        .then(result => {
-            const user = result.user;
-            toast.success("Login successful!");
-            router.push('/')
-        })
-        .catch(error => console.log(error?.message))
+        const toastId = toast.loading("Loading...");
+        try {
+            await signInUser(email, password);
+            await createJWT({ email });
+            startTransition(() => {
+              refresh();
+              replace(from);
+              toast.dismiss(toastId);
+              toast.success("User login successful!");
+            });
+          } catch (error) {
+            toast.dismiss(toastId);
+            toast.error(error.message || "User not signed in");
+          }
     }
 
     return (

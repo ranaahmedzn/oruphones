@@ -1,6 +1,7 @@
 'use client';
 
 import createJWT from '@/Utilities/createJWT';
+import { userTemplate } from '@/Utilities/userTemplate';
 import useAuth from '@/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +15,9 @@ const SignUpPage = () => {
     const [error, setError] = useState(false)
 
     const { createUser, updateUserProfile } = useAuth()
+    const user = userTemplate()
+    console.log(user)
+ 
     const search = useSearchParams();
     const from = search.get("redirectUrl") || "/";
     const { replace, refresh } = useRouter();
@@ -43,6 +47,18 @@ const SignUpPage = () => {
             const data = await res.json()
 
             await updateUserProfile(name, data.secure_url)
+            user.name = name;
+            user.email = email;
+            user.profilePhoto = data.secure_url;
+
+            // await fetch('http://localhost:5000/users', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(user)
+            // }).then(res => res.json())
+            // .then(data => {console.log(data)})
 
             startTransition(() => {
                 refresh();
@@ -84,7 +100,7 @@ const SignUpPage = () => {
                         <div className="mb-6">
                             <label htmlFor="photo" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile photo</label>
 
-                            <input class="relative m-0 block w-full min-w-0 flex-auto bg-[#de8adf48] cursor-pointer
+                            <input className="relative m-0 block w-full min-w-0 flex-auto bg-[#de8adf48] cursor-pointer
                             bg-clip-padding px-3 text-sm font-normal rounded-lg transition duration-300 ease-in-out file:-mx-3 file:overflow-hidden file:rounded-l-lg file:border-none file:bg-indigo-500 file:px-3 file:py-2.5 file:text-white file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] file:cursor-pointer hover:file:bg-indigo-600 file:text-sm" id="photo" type="file" />
                         </div>
                         {

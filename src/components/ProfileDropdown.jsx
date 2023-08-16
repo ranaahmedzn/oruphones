@@ -10,11 +10,8 @@ import Logout from './Logout';
 const ProfileDropdown = () => {
     const [openDropdown, setOpenDropdown] = useState(false)
 
-    const {user} = useAuth()
-    
-    {
-        user && console.log(user?.displayName)
-    }
+    const { user } = useAuth()
+
     return (
         <div className='relative'>
             {/* for large devices */}
@@ -32,8 +29,9 @@ const ProfileDropdown = () => {
             </button>
 
             {/* for smaller devices */}
-            <Image onClick={() => setOpenDropdown(!openDropdown)} className="md:hidden rounded-lg" width={33} height={33} src="https://i.ibb.co/8gFjx0j/admin.png" alt="User photo" />
-
+            {
+                user?.photoURL && <Image onClick={() => setOpenDropdown(!openDropdown)} className="md:hidden rounded-lg" width={33} height={33} src={user?.photoURL} alt="User photo" />
+            }
             <div className={`${openDropdown ? "block" : "hidden"} z-10 absolute right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-48`}>
                 <div className="px-4 py-3 text-sm text-gray-900">
                     <div className="font-medium">{user && user?.displayName}</div>
