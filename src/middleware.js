@@ -15,6 +15,9 @@ export const middleware = async (request) => {
     if (isPath("/login") || isPath("/signup")) {
       return NextResponse.redirect(new URL("/", request.url));
     }
+    else if (pathname === "/dashboard") {
+      return NextResponse.redirect(new URL("/dashboard/profile", request.url));
+    }
     return NextResponse.next();
   } catch (error) {
     if (isPath("/login") || isPath("/signup")) {
