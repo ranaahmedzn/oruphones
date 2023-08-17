@@ -10,7 +10,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/users/user?email=${user?.email}`)
+            fetch(`https://oruphones-server.vercel.app/users/user?email=${user?.email}`)
                 .then(res => res.json())
                 .then(data => {
                     setUserData(data)

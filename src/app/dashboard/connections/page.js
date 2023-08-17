@@ -5,16 +5,16 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 const ConnectionsPage = () => {
-    const {user} = useAuth()
+    const { user } = useAuth()
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/users?email=${user?.email}`)
-            .then(res => res.json())
-            .then(data => {
-                setUsers(data)
-            })
+            fetch(`https://oruphones-server.vercel.app/users?email=${user?.email}`)
+                .then(res => res.json())
+                .then(data => {
+                    setUsers(data)
+                })
         }
     }, [user?.email]);
 

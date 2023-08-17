@@ -17,7 +17,7 @@ const SignUpPage = () => {
     const { createUser, updateUserProfile } = useAuth()
     const user = userTemplate()
     console.log(user)
- 
+
     const search = useSearchParams();
     const from = search.get("redirectUrl") || "/";
     const { replace, refresh } = useRouter();
@@ -51,14 +51,14 @@ const SignUpPage = () => {
             user.email = email;
             user.profilePhoto = data.secure_url;
 
-            // await fetch('http://localhost:5000/users', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(user)
-            // }).then(res => res.json())
-            // .then(data => {console.log(data)})
+            await fetch('https://oruphones-server.vercel.app/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            }).then(res => res.json())
+                .then(data => { console.log(data) })
 
             startTransition(() => {
                 refresh();
