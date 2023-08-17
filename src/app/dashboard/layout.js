@@ -2,7 +2,6 @@ import DashboardDrawer from '@/components/DashboardDrawer';
 import Logout from '@/components/Logout';
 import ProfileDropdown from '@/components/profileDropdown';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { BiBell } from 'react-icons/bi';
 import { FaAngleRight } from 'react-icons/fa';
 
@@ -38,9 +37,7 @@ const layout = ({ children }) => {
 
                         <div className='flex gap-[10px] md:gap-4 items-center'>
                             <BiBell size={26} />
-                            <Suspense>
-                                <ProfileDropdown />
-                            </Suspense>
+                            <ProfileDropdown />
                         </div>
                     </nav>
                     {children}
