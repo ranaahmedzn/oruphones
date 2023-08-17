@@ -1,6 +1,6 @@
 import DashboardDrawer from '@/components/DashboardDrawer';
 import Logout from '@/components/Logout';
-import ProfileDropdown from '@/components/profileDropdown';
+import ProfileDropdown from '@/components/ProfileDropdown';
 import Link from 'next/link';
 import { BiBell } from 'react-icons/bi';
 import { FaAngleRight } from 'react-icons/fa';
